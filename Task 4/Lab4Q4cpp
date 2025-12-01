@@ -1,0 +1,55 @@
+#include <iostream>
+#include <iomanip>
+using namespace std;
+template <typename S>
+S calibrateValue(const S &x, char factor) {
+    int f = factor - '0';
+    return x * f;
+}
+void adjustReading(double *value, double offset = 1.25) {
+    *value += offset;
+}
+void clampReading(double &r) {
+    if (r < 0) r = 0;
+    else if (r > 100) r = 100;
+}
+double computeDifference(int a, double b) {
+    return a - b;
+}
+
+int main() {
+    int intSensor;
+    double doubleSensor;
+    cout << "Enter one integer sensor reading: ";
+    cin >> intSensor;
+    cout << "Enter one double sensor reading: ";
+    cin >> doubleSensor;
+    int calibratedInt = calibrateValue(intSensor, '2');
+    double calibratedDouble = calibrateValue(doubleSensor, '2');
+    cout << "\nCalibrated values:\n";
+    cout << setw(10) << calibratedInt << endl;
+    cout << setw(10) << setprecision(4) << calibratedDouble << endl;
+    
+    double convertedInt = static_cast<double>(calibratedInt);
+    adjustReading(&convertedInt);
+    adjustReading(&calibratedDouble, 3.4);
+    cout << "Adjusted values:\n";
+    cout << setw(10) << setprecision(4) << convertedInt << endl;
+    cout << setw(10) << setprecision(4) << calibratedDouble << endl;
+    
+    clampReading(convertedInt);
+    clampReading(calibratedDouble);
+    cout << "Clamped values:\n";
+    cout << setw(10) << setprecision(4) << convertedInt << endl;
+    cout << setw(10) << setprecision(4) << calibratedDouble << endl;
+    
+    int finalInt = static_cast<int>(convertedInt);
+    cout << "Converted back to int:\n";
+    cout << setw(10) << finalInt << endl;
+    
+    double difference = computeDifference(finalInt, calibratedDouble);
+    cout << "Difference (int - double):\n";
+    cout << setw(10) << setprecision(4) << difference << endl;
+
+    return 0;
+}
